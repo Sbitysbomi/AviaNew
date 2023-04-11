@@ -5,7 +5,7 @@ import FilterStops from "./FilterStops";
 
 function FilterBlock() {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <FilterCompanies />
       <FilterStops />
     </Stack>
