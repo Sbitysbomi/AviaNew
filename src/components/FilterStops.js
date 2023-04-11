@@ -1,7 +1,7 @@
 import React from 'react';
 import {Checkbox, FormControlLabel, FormGroup, FormLabel, Paper} from "@mui/material";
 
-function FilterStops(props) {
+function FilterStops() {
   return (
     <Paper sx={{p:2}}>
       <FormGroup>
