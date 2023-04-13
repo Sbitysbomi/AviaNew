@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Paper, Stack} from "@mui/material";
+import { Stack} from "@mui/material";
 import FilterCompanies from "./FilterCompanies";
 import FilterStops from "./FilterStops";
 
