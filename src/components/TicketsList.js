@@ -2,9 +2,7 @@ import React from 'react';
 import {Box, Button, ButtonGroup, Stack} from "@mui/material";
 import Ticket from "./Ticket";
 
-
-
-function Tickets(props) {
+function TicketsList(props) {
   const tickets = props.tickets;
   const filters = props.filters ?? {};
   const filterHandler = () => {
@@ -18,7 +16,11 @@ function Tickets(props) {
          <Button>ОПТИМАЛЬНЫЙ</Button>
        </ButtonGroup>
 
-       <Stack spacing={2}>
+        {/* <Stack spacing={2}>
+            {tickets.map(i => <Ticket key={i.id} data={i} />)}
+        </Stack>*/}
+
+        <Stack spacing={2}>
          {tickets.filter(filterHandler).map(i => <Ticket key={i.id} data={i} />)}
        </Stack>
 
@@ -30,4 +32,4 @@ function Tickets(props) {
   );
 }
 
-export default Tickets;
+export default TicketsList;

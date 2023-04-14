@@ -27,7 +27,7 @@ function SearchBlock({filter, setFilter}) {
 
 
     return (
-        <Paper>
+        <Paper >
             <Grid container>
                 <Grid item xs={6} sm={3} sx={{borderRight:"lightgray 1px solid"}}>
                     <Box p={2} position={'relative'} >

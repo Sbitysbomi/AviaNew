@@ -1,10 +1,15 @@
 
 import {Box, Button, Container, Grid} from "@mui/material";
 import FilterBlock from "./components/FilterBlock";
-import Tickets from "./components/Tickets";
+import TicketsList from "./components/TicketsList";
 import {getCompany} from "./helper";
 import SearchBlock from "./components/SearchBlock";
 import {useEffect, useState} from "react";
+import axios from 'axios';
+
+const URL = "https://api.npoint.io/";
+const COMPANY = process.env.REACT_APP_COMPANIES_KEY;
+const TICK = process.env.REACT_APP_TICKET_KEY;
 
 const mockTickets = [
   {
@@ -31,13 +36,18 @@ function App() {
   const [filter, setFilter] = useState({
     dest:'',origin:'',from:'',to:'', company:'',transitions:[0]
   })
-  const [tickets, setTickets] = useState(mockTickets)
-  useEffect(()=>{
-    //api call
 
-    let data = mockTickets; //data from api call
-    setTickets(data)
+  const [tickets, setTickets] = useState({mockTickets})
+
+  useEffect(()=>{
+     fetch(URL + TICK)
+         .then(res => {console.log(res.json())})
+         .then((data) => console.log(data))
+         .catch(err => console.log(err));
+   // let data = mockTickets; //data from api call
+   // setTickets(data)
   },[filter])
+
   return (
       <Box my={5}>
         <Container maxWidth={"md"}>
@@ -48,13 +58,13 @@ function App() {
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <SearchBlock filter={filter} setFilter={setFilter} />
+              <SearchBlock filter={filter} setFilter={setFilter}/>
             </Grid>
             <Grid item xs={12} md={4}>
-              <FilterBlock />
+              <FilterBlock  filter={filter} setFilter={setFilter}/>
             </Grid>
             <Grid item xs={12} md={8}>
-              <Tickets tickets={tickets} filter={filter} />
+              <TicketsList tickets={tickets} filter={filter} />
             </Grid>
           </Grid>
         </Container>

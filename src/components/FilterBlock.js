@@ -3,11 +3,12 @@ import { Stack} from "@mui/material";
 import FilterCompanies from "./FilterCompanies";
 import FilterStops from "./FilterStops";
 
-function FilterBlock(props) {
+function FilterBlock({filter, setFilter}) {
+
   return (
     <Stack spacing={3}>
-      <FilterCompanies />
-      <FilterStops />
+      <FilterCompanies filter={filter} setFilter={setFilter}/>
+      <FilterStops  filter={filter} setFilter={setFilter}/>
     </Stack>
 
   );

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Checkbox, FormControlLabel, FormGroup, FormLabel, Paper} from "@mui/material";
 
-function FilterStops() {
+function FilterStops({filter, setFilter}) {
+
+    const [stops, setStops] = useState()
   return (
     <Paper sx={{p:2}}>
       <FormGroup>
