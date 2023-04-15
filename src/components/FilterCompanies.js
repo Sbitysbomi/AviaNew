@@ -5,14 +5,20 @@ const companies = getCompanies();
 
 function FilterCompanies({filter, setFilter}) {
 
+
     const [company, setCompany] = useState("S7");
 
-    const handleClick = (e) => {
-        setCompany(e.target.value)
-        setFilter(...filter, company.e.target.value)
+    const handleChange = (e) => {
+        const selectedCompany = e.target.value;
+        setCompany(selectedCompany);
+        if(Array.isArray(filter)) {
+            setFilter([...filter, selectedCompany]);
+        } else {
+            setFilter([filter, selectedCompany]);
+        }
     }
 
-  return (
+    return (
     <Paper sx={{p:2}}>
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">Компании</FormLabel>
@@ -22,7 +28,7 @@ function FilterCompanies({filter, setFilter}) {
           name="company"
         >
           <FormControlLabel  value="all" control={<Radio />} label="Все" />
-          {companies.map( i => <FormControlLabel key={i.id} value={i.id} control={<Radio />} label={i.name} onClick={handleClick} />)}
+          {companies.map( i => <FormControlLabel key={i.id} value={i.id} control={<Radio />} label={i.name} onChange={handleChange} />)}
         </RadioGroup>
       </FormControl>
     </Paper>

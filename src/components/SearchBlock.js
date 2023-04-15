@@ -6,8 +6,8 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 
 function SearchBlock({filter, setFilter}) {
-    const [origin, setOrigin] = useState('');
-    const [dest, setDest] = useState('');
+    const [origin, setOrigin] = useState('MOW');
+    const [dest, setDest] = useState('EKT');
     const swap = () => {
         const temp = origin;
         const newOrigin = dest;

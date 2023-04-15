@@ -4,6 +4,7 @@ import {Checkbox, FormControlLabel, FormGroup, FormLabel, Paper} from "@mui/mate
 function FilterStops({filter, setFilter}) {
 
     const [stops, setStops] = useState()
+
   return (
     <Paper sx={{p:2}}>
       <FormGroup>

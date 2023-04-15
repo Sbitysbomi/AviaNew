@@ -4,13 +4,19 @@ import {getCompanies, getCompany} from "../helper";
 import Moment from "react-moment";
 import {duration} from "moment";
 
+const S7Id = "cddfa038-823b-43b1-b18d-395731881077";
+const XiamenId = "7dc12d0b-ce42-48a0-8673-0dad4d698764";
 
-function Ticket({data}) {
-  const company = getCompany(data.companyId);
+const S7Logo = getCompany('qwerty-s7').logo;
+const XiamenLogo = getCompany('qwerty-s7').logo;
+
+
+function Ticket({data, company}) {
+  // const company = getCompany(data.companyId);
   const start = new Date(data.info.dateStart);
   const end = new Date(data.info.dateEnd);
   const d = duration(data.info.duration, 'ms');
-  console.log(d);
+
 
   return (
     <Paper sx={{p:2}}>
@@ -18,7 +24,8 @@ function Ticket({data}) {
         <Typography variant={'h5'}>
           {data.price} Р
         </Typography>
-        <img src={company.logo ?? ''} style={{height:'36px',width:'110px'}}/>
+        <img src={data.companyId == S7Id ? S7Logo : XiamenLogo}
+             style={{height:'36px',width:'110px'}}/>
       </Box>
 
       <Grid container spacing={2}>
@@ -41,7 +48,7 @@ function Ticket({data}) {
         </Grid>
 
         <Grid item xs={4}>
-          {data.info.stops.length == 0
+          {data.info.stops.length === 0
             && <Typography variant={'subtitle2'} color={'darkgray'}
                            fontSize={12}>БЕЗ ПЕРЕСАДОК</Typography>}
           {data.info.stops.length > 0

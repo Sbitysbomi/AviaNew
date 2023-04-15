@@ -18,4 +18,7 @@ const getCompanies = () =>{
 const getCompany = (id) =>{
   return getCompanies().find((elm) => elm.id == id);
 }
-export {getCompanies, getCompany};
+const getCompanyFromList = (list, id) =>{
+  return getCompanies().find((elm) => elm.id == id);
+}
+export {getCompanies, getCompany, getCompanyFromList};

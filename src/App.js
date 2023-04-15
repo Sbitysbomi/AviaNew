@@ -1,15 +1,15 @@
 
-import {Box, Button, Container, Grid} from "@mui/material";
-import FilterBlock from "./components/FilterBlock";
-import TicketsList from "./components/TicketsList";
-import {getCompany} from "./helper";
+import {Box, Button, Container, Grid, Stack} from "@mui/material";
+import {getCompanies, getCompany} from "./helper";
 import SearchBlock from "./components/SearchBlock";
 import {useEffect, useState} from "react";
-import axios from 'axios';
+import FilterCompanies from "./components/FilterCompanies";
+import FilterStops from "./components/FilterStops";
+import TicketsList from "./components/TicketsList";
 
+
+const ticketKey = process.env.REACT_APP_TICKET_KEY;
 const URL = "https://api.npoint.io/";
-const COMPANY = process.env.REACT_APP_COMPANIES_KEY;
-const TICK = process.env.REACT_APP_TICKET_KEY;
 
 const mockTickets = [
   {
@@ -37,35 +37,49 @@ function App() {
     dest:'',origin:'',from:'',to:'', company:'',transitions:[0]
   })
 
-  const [tickets, setTickets] = useState({mockTickets})
-
-  useEffect(()=>{
-     fetch(URL + TICK)
-         .then(res => {console.log(res.json())})
-         .then((data) => console.log(data))
-         .catch(err => console.log(err));
+  const [tickets, setTickets] = useState(mockTickets);
+  const fetchData = async () => {
+    // fetch(URL + ticketKey)
+    //     .then(response => response.json())
+    //     .then(json =>{
+    //       setTickets(json);
+    //     });
+     const d = (await fetch(URL + ticketKey));
+     const data = (await d.json());
+     setTickets(data);
+  }
+  useEffect( ()=>{
+    fetchData();
    // let data = mockTickets; //data from api call
    // setTickets(data)
-  },[filter])
+  },[])
 
   return (
       <Box my={5}>
         <Container maxWidth={"md"}>
           <Grid container spacing={2}>
+
             <Grid item xs={12}>
               <Box display={'flex'} justifyContent={'center'}>
                 <img src={getCompany('qwerty-s7').logo} alt={'image'} />
               </Box>
             </Grid>
+
             <Grid item xs={12}>
               <SearchBlock filter={filter} setFilter={setFilter}/>
             </Grid>
+
             <Grid item xs={12} md={4}>
-              <FilterBlock  filter={filter} setFilter={setFilter}/>
+              <Stack spacing={3}>
+                <FilterCompanies filter={filter} setFilter={setFilter}/>
+                <FilterStops  filter={filter} setFilter={setFilter}/>
+              </Stack>
             </Grid>
+
             <Grid item xs={12} md={8}>
-              <TicketsList tickets={tickets} filter={filter} />
+              <TicketsList filter={filter} setFilter={setFilter} tickets={tickets} setTickets={setTickets}/>
             </Grid>
+            
           </Grid>
         </Container>
       </Box>
