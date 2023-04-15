@@ -10,12 +10,16 @@ function FilterCompanies({filter, setFilter}) {
 
     const handleChange = (e) => {
         const selectedCompany = e.target.value;
+        console.log(selectedCompany);
         setCompany(selectedCompany);
         if(Array.isArray(filter)) {
             setFilter([...filter, selectedCompany]);
+            console.log([...filter, selectedCompany]);
         } else {
             setFilter([filter, selectedCompany]);
+            console.log([filter, selectedCompany]);
         }
+
     }
 
     return (

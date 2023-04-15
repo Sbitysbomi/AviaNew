@@ -6,8 +6,8 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 
 function SearchBlock({filter, setFilter}) {
-    const [origin, setOrigin] = useState('MOW');
-    const [dest, setDest] = useState('EKT');
+    const [origin, setOrigin] = useState('');
+    const [dest, setDest] = useState('');
     const swap = () => {
         const temp = origin;
         const newOrigin = dest;
@@ -18,10 +18,13 @@ function SearchBlock({filter, setFilter}) {
     const updOrigin = (e) => {
         setOrigin(e.target.value);
         setFilter({...filter, origin:e.target.value})
+        console.log("frm org")
+
     }
     const updDest = (e) => {
         setDest(e.target.value);
         setFilter({...filter, dest:e.target.value})
+        console.log("frm dst")
     }
 
 
@@ -33,6 +36,7 @@ function SearchBlock({filter, setFilter}) {
                     <Box p={2} position={'relative'} >
                         <TextField id="standard-basic" label="Пункт отправления" variant="standard" value={origin}
                                    onInput={updOrigin} />
+
                         <Box position={'absolute'} bgcolor={'white'} right={0} top={'50%'} border={'lightgray 1px solid'}
                              sx={{transform:'translate(50%, -20%)'}}
                              borderRadius={'50%'} >
@@ -42,18 +46,21 @@ function SearchBlock({filter, setFilter}) {
                         </Box>
                     </Box>
                 </Grid>
+
                 <Grid item xs={6} sm={3}>
                     <Box p={2}>
                         <TextField id="standard-basic" label="Пункт назначения" variant="standard" value={dest}
                                    onInput={updDest}  />
                     </Box>
                 </Grid>
+
                 <Grid item xs={6} sm={3}>
                     <Box p={2}>
                         <DatePicker label={"От"}
                                     views={['year', 'month', 'day']} />
                     </Box>
                 </Grid>
+
                 <Grid item xs={6} sm={3}>
                     <Box p={2}>
                         <DatePicker label={"По"} />
