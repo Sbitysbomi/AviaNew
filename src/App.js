@@ -1,4 +1,3 @@
-
 import {Box, Button, Container, Grid, Stack} from "@mui/material";
 import {getCompanies, getCompany} from "./helper";
 import SearchBlock from "./components/SearchBlock";
@@ -33,25 +32,61 @@ const mockTickets = [
 ]
 
 function App() {
-  const [filter, setFilter] = useState({
-    dest:'',origin:'',from:'',to:'', company:'',transitions:[0]
+  const [filter, setFilterRaw] = useState({
+    dest:'',origin:'',from:'',to:'', company:'',transitions:[0], sort:""
   })
 
-  const [tickets, setTickets] = useState(mockTickets);
+  const setFilter = (v) => {
+    setFilterRaw(v);
+    const filterHandler = (item) => {
+      if(v.dest  && (item.info.destination != v.dest)){
+        // console.log(item, filters);
+        return false
+      }
+      if(v.origin && (item.info.origin != v.origin)){
+        //   console.log(item, filters);
+        return false
+      }
+      return true
+    }
+    const sort = (item, prev) => {
+      if(v.sort == 'price'){
+        return item.price - prev.price;
+      }
+
+      if(v.sort == 'duration'){
+        let l = item.info.duration - prev.info.duration;
+        return  l;
+      }
+
+    }
+
+    let tickets = baseTickets.filter(filterHandler);
+
+    if(v.sort){
+      tickets.sort(sort);
+    }
+    setCurrentTickets(tickets);
+  }
+
+  const [baseTickets, setBaseTickets] = useState([]);
+  const [currentTickets, setCurrentTickets] = useState([]);
   const fetchData = async () => {
     // fetch(URL + ticketKey)
     //     .then(response => response.json())
     //     .then(json =>{
     //       setTickets(json);
     //     });
-     const d = (await fetch(URL + ticketKey));
-     const data = (await d.json());
-     setTickets(data);
+    const d = (await fetch(URL + ticketKey));
+    const data = (await d.json());
+    setBaseTickets(data);
+    setCurrentTickets(data);
+    // setFilter(filter);
   }
   useEffect( ()=>{
     fetchData();
-   // let data = mockTickets; //data from api call
-   // setTickets(data)
+    // let data = mockTickets; //data from api call
+    // setTickets(data)
   },[])
 
   return (
@@ -77,9 +112,9 @@ function App() {
             </Grid>
 
             <Grid item xs={12} md={8}>
-              <TicketsList filter={filter} setFilter={setFilter} tickets={tickets} setTickets={setTickets}/>
+              <TicketsList filter={filter} setFilter={setFilter} tickets={currentTickets} setTickets={setCurrentTickets}/>
             </Grid>
-            
+
           </Grid>
         </Container>
       </Box>

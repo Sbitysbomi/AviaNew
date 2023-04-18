@@ -1,57 +1,62 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, ButtonGroup, Stack} from "@mui/material";
+import {Box, Button, ButtonGroup,  Stack, Typography} from "@mui/material";
 import Ticket from "./Ticket";
+import Pagination from '@mui/material/Pagination';
 import {getCompanies, getCompanyFromList} from "../helper";
 
 const URL = "https://api.npoint.io/";
 const companiesKey = process.env.REACT_APP_COMPANIES_KEY;
 const companiesList = getCompanies();
 let ticketSlice = [0, 5]
-const ticketPerPage = 5;
 
 function TicketsList(props) {
-  const tickets = props.tickets;
+    const tickets = props.tickets;
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(5);
+    const [pageCount, setPageCount] = useState(0);
   const filters = props.filter ?? {};
+  const [loading, setLoading] = useState(true);
 
   const [companies, setCompanies] = useState(companiesList);
-  const filterHandler = (item) => {
-      if(filters.destination  && (item.info.destination != filters.destination)){
-           // console.log(item, filters);
-          return false
-      }
-      if(filters.origin && (item.info.origin != filters.origin)){
-       //   console.log(item, filters);
-          return false
-      }
-    return true
-  }
+    const handlePageChange = (e, value) => {
+      if(value > pageCount)
+          value = 1;
+      setPage(value);
+    }
+
 
   useEffect(()=>{
       async function fetchCompanies () {
           (await fetch(URL + companiesKey)).json().then(data => {
-              setCompanies(data)
+              setCompanies(data);
+          }).finally(()=>{
+              setLoading(false);
           });
       }
       fetchCompanies();
   },[])
+  useEffect(()=>{
+      setPageCount(Math.floor(tickets.length / perPage + (tickets.length % perPage ? 1 : 0)));
+  },[tickets])
 
-    const handleClick = () => {
-      ticketSlice = ticketSlice.map((i) => i + 5)
-    }
 
   return (
     <>
        <ButtonGroup fullWidth variant={"outlined"} sx={{mb:2}}>
-         <Button>САМЫЙ ДЕШЕВЫЙ</Button>
-         <Button>САМЫЙ БЫСТРЫЙ</Button>
-         <Button>ОПТИМАЛЬНЫЙ</Button>
+         <Button onClick={() => {props.setFilter({...props.filter, sort:'price'})}}>САМЫЙ ДЕШЕВЫЙ</Button>
+         <Button onClick={() => {props.setFilter({...props.filter, sort:'duration'})}}>САМЫЙ БЫСТРЫЙ</Button>
+         <Button onClick={() => {props.setFilter({...props.filter, sort:''})}}>сброс</Button>
        </ButtonGroup>
 
         <Stack spacing={2}>
-            {(tickets.filter(filterHandler)
-              .slice(...ticketSlice))
+            <Pagination count={pageCount} variant="outlined"
+                        onChange={handlePageChange}
+                        color="primary" />
+            {loading ? <Typography variant={'h4'} textAlign={'center'}>Загрузка...</Typography> : (tickets
+                .slice((page-1) * perPage, (page-1) * perPage + perPage))
                 .map(i => <Ticket key={i.id}
-                  company={getCompanyFromList(companies, i.companyId)} data={i} />)}
+                                  company={getCompanyFromList(companies, i.companyId)} data={i} />)}
+
         </Stack>
 
         {/* <Stack spacing={2}>
@@ -61,7 +66,7 @@ function TicketsList(props) {
        <Box sx={{my:2}}>
 
         <Button fullWidth variant={"outlined"}
-                sx={{fontSize:10}} onClick={handleClick}>Показать еще 5 билетов</Button>
+                sx={{fontSize:10}} onClick={ ()=> handlePageChange(null, page + 1) }>Показать еще 5 билетов</Button>
        </Box>
     </>
   );
